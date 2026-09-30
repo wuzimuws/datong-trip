@@ -293,8 +293,8 @@ function pointUrl(key){
 }
 function navUrl(key, viaKey){
   const p=POI[key], g=gcj(p.wgs);
-  let q = g ? "to="+g[0]+","+g[1]+","+encodeURIComponent(p.name)
-            : "to=,"+encodeURIComponent(p.name);
+  if(!g) return pointUrl(key);   // 没坐标就退化成搜索，绝不伪造空坐标导航链接
+  let q = "to="+g[0]+","+g[1]+","+encodeURIComponent(p.name);
   if(viaKey){
     const v=POI[viaKey], gv=gcj(v.wgs);
     if(gv) q += "&via="+gv[0]+","+gv[1]+","+encodeURIComponent(v.name);
@@ -434,9 +434,9 @@ const DAYS=[
    {t:"~13:00", x:"中途补电 + 午饭", d:"同样走河北线回津。国庆服务区排队，留足余量。"},
    {t:"19:00–20:00", x:"抵达天津", d:"这是全程最长的一天，全天约 13 小时。"}
   ],
-  route:{to:"center", via:"xkasi",
+  route:{searchOnly:"center",
    flow:'大同酒店 → 恒山游客中心（停车换摆渡车）→ 悬空寺 → 返天津',
-   note:"「恒山游客中心」没有可靠公开坐标，这个链接走高德关键词搜索；落地后照现场指示牌走。"}}
+   note:"「恒山游客中心」没有可靠的公开坐标——我没有编一个给你，因为导错点比不给更危险。这里只给搜索链接，在高德里点「导航」即可；落地后照现场指示牌走。"}}
 ];
 
 /* ============================================================
@@ -504,14 +504,14 @@ document.getElementById("days").innerHTML = DAYS.map(d=>{
     <ul class="marks">${marks}</ul>
     <ul class="tl">${tl}</ul>
     <details class="rt">
-      <summary>展开当日路线<span class="rt-x">1 个途经点</span></summary>
+      <summary>展开当日路线<span class="rt-x">${r.searchOnly?"搜索直达":"1 个途经点"}</span></summary>
       <div class="rt-body">
         <div class="flow">${r.flow.replace(/→/g,"<span>→</span>")}</div>
         <p>${r.note}</p>
-        <div class="acts">
-          <a class="btn p" href="${navUrl(r.to,r.via)}" rel="noopener">一键全天导航 ↗</a>
-          <a class="btn" href="${pointUrl(r.to)}" rel="noopener">只导终点 ↗</a>
-        </div>
+        <div class="acts">${r.searchOnly
+          ? `<a class="btn p" href="${pointUrl(r.searchOnly)}" rel="noopener">在高德搜索「${esc(POI[r.searchOnly].name)}」↗</a>`
+          : `<a class="btn p" href="${navUrl(r.to,r.via)}" rel="noopener">一键全天导航 ↗</a>
+             <a class="btn" href="${pointUrl(r.to)}" rel="noopener">只导终点 ↗</a>`}</div>
       </div>
     </details>
   </div>`;
