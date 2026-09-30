@@ -135,6 +135,25 @@ ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:5px;heig
 ul.tips li b{color:var(--fg);font-weight:600}
 .box{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);padding:6px 16px}
 
+/* weather */
+.wx{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.wx-r{display:grid;grid-template-columns:56px 1fr auto;gap:10px;padding:11px 15px;
+  align-items:center;border-bottom:1px solid var(--line2)}
+.wx-r:last-child{border-bottom:0}
+.wx-d{font-size:13px;font-weight:650;font-variant-numeric:tabular-nums}
+.wx-d span{display:block;font-size:10.5px;color:var(--fg3);font-weight:400}
+.wx-t{font-size:13.5px;font-variant-numeric:tabular-nums}
+.wx-t span{display:block;font-size:11.5px;color:var(--fg3);margin-top:2px}
+.wx-n{font-size:11.5px;color:var(--fg3);text-align:right;line-height:1.45;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.wx-n .rain{color:var(--warn);font-weight:650}
+.layers{display:grid;gap:8px;margin-top:11px}
+.lyr{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);
+  padding:12px 15px;display:grid;grid-template-columns:auto 1fr;gap:13px}
+.lyr .k{font-size:11.5px;font-weight:700;color:var(--fg3);letter-spacing:.06em;white-space:nowrap;padding-top:2px}
+.lyr .v{font-size:13.5px;color:var(--fg2)}
+.lyr .v b{color:var(--fg);font-weight:630}
+
 footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--fg3);line-height:1.8}
 footer b{color:var(--fg2);font-weight:600}
 </style>
@@ -222,6 +241,13 @@ footer b{color:var(--fg2);font-weight:600}
 </section>
 
 <section>
+  <div class="sec-h"><h2>天气与穿衣</h2><span class="en">Weather</span></div>
+  <div class="wx" id="wx"></div>
+  <div class="layers" id="layers"></div>
+  <div id="wxrisk"></div>
+</section>
+
+<section>
   <div class="sec-h"><h2>待办清单</h2><span class="en">To-do</span></div>
   <div class="box"><ol class="todo" id="todo"></ol></div>
 </section>
@@ -237,6 +263,8 @@ footer b{color:var(--fg2);font-weight:600}
   云冈石窟：线上实名预约、可提前 7 日、无现场窗口（云冈研究院公告）<br>
   悬空寺：登临需另购登临费，车辆停恒山游客中心换摆渡车（恒山景区官网）<br>
   大同市博物馆：免费不免票、9:00–17:00、16:00 停止入场<br>
+  大同城墙：降雨天气晚间不开放（大同城墙景区公告）<br>
+  天气：Open-Meteo 数值预报，已与 ECMWF 模式及 wttr.in 交叉比对<br>
   页面时间锚点取自你的订单：云冈 10/4 6:30–10:30 场 · 悬空寺 10/5 8:00 场
 </footer>
 
@@ -395,7 +423,9 @@ const DAYS=[
    {t:"14:30", x:pl("shanhua"),
     d:"门票 40 元，08:30–17:00。比华严寺清静，重点看大雄宝殿与三圣殿塑像壁画，寺前有明代五龙壁。"},
    {t:"17:30", x:pl("qingyuan","西城墙 · 清远门"),
-    d:"城墙春秋季 07:00–22:00，四门（和阳 / 永泰 / 清远 / 武定）都能上下。夜景是古城最值得的一处，所以放最后。"},
+    d:"城墙春秋季 07:00–22:00，四门（和阳 / 永泰 / 清远 / 武定）都能上下。夜景是古城最值得的一处，所以放最后。⚠️ 官方规定<b>降雨天气晚间不开放</b>，而 10/03 的降水预报模型之间差 8 倍，这一段有作废风险。", hi:true},
+   {t:"Plan B", x:"城墙挪到 10/02 傍晚（预测无雨）",
+    d:"若 10/03 当天确认有雨：跳过城墙，改在鼓楼 / 仿古街夜逛；或者 10/02 到得早就当晚先上墙看夜景，Day 2 就不用赶。"},
    {t:"20:00", x:"回酒店充电", d:"市区往返很短，电量基本不动。"}
   ],
   route:{to:"qingyuan", via:"shanhua",
@@ -430,8 +460,9 @@ const DAYS=[
     d:"售票窗口与摆渡车比景区开门早半小时开始。", hi:true},
    {t:"08:00", x:"悬空寺登临（8:00 场）",
     d:"登临约 1.5–2 小时。悬空寺台阶一次仅容 1 人通行，人多时排队会拖长。"},
-   {t:"10:30", x:"出发返津", d:"约 500 km / 6.5 小时（含 1–2 次补电）。", hi:true},
-   {t:"~13:00", x:"中途补电 + 午饭", d:"同样走河北线回津。国庆服务区排队，留足余量。"},
+   {t:"10:30", x:"出发返津", d:"约 500 km / 7 小时。低温 + 开暖风会再削续航（490 km 是常温数据），<b>按补 2 次电规划</b>，别按 1 次算。", hi:true},
+   {t:"~12:30", x:"第 1 次补电 + 午饭", d:"同样走河北线回津。国庆服务区排队，留足余量。"},
+   {t:"~16:00", x:"第 2 次补电", d:"若前一段跑得顺、电量充裕，这一站可以跳过。"},
    {t:"19:00–20:00", x:"抵达天津", d:"这是全程最长的一天，全天约 13 小时。"}
   ],
   route:{searchOnly:"center",
@@ -445,6 +476,12 @@ const DAYS=[
 const TODO=[
  {t:"出发前：把三个预约码截图存进手机相册", crit:true,
   d:"云冈石窟、悬空寺登临、大同市博物馆。景区排队处信号差，翻聊天记录会耽误时间。"},
+ {t:"出发前：把装备装车", crit:true,
+  d:"身份证原件（云冈/悬空寺/博物馆全部实名刷证）· 轻薄羽绒/抓绒 · 防风外套 · 秋裤 · 防滑运动鞋 · 手套 · 折叠伞 + 雨衣（10/03 可能下雨，悬空寺台阶窄打不了伞）· 墨镜。"},
+ {t:"出发前：车上备除霜刮片和玻璃水", crit:false,
+  d:"大同夜里最低 1–6°C，早上车窗可能结霜；10/04 你 05:45 就出门，留出 5 分钟清玻璃。"},
+ {t:"出发前：清空车里的矿泉水和饮料", crit:false,
+  d:"大同夜里接近 0°C，装满液体的瓶子会冻裂。"},
  {t:"出发前：在高德设好路线并加途经点", crit:false,
   d:"确认走河北线（不经北京），所以不需要办进京证。中途把涞源或蔚县设为途经点。"},
  {t:"出发前：用小鹏 App 规划沿途超充，另备一个第三方桩", crit:true,
@@ -471,6 +508,34 @@ const TIPS=[
  ["充电","酒店自带充电桩，晚上回店插上最省心；宣大高速化稍营、阳原服务区各有 4 个快充，宣化服务区双侧共 8 个。"],
  ["退票规则","恒山 / 悬空寺线上票可在游览日之前的每天 07:25–22:00 退，过期不退。"],
  ["实时信息","门票与开放时间可能因客流临时调整，以景区现场公告和高德实时信息为准。"]
+];
+
+/* ============================================================
+   天气（Open-Meteo，2026-09-30 拉取；已与 ECMWF 模型及 wttr.in 交叉比对）
+   大同海拔 1047 m，高原盆地，昼夜温差极大
+   ============================================================ */
+const WX=[
+ {d:"10/02", w:"周五", t:"大同 2° ~ 17°", f:"体感 -0° ~ 14°", n:"无降水", w2:"风 11 km/h", rain:false},
+ {d:"10/03", w:"周六", t:"大同 7° ~ 17°", f:"体感 2° ~ 13°", n:"⚠️ 可能下雨", w2:"阵风 71 km/h", rain:true},
+ {d:"10/04", w:"周日", t:"大同 4° ~ 13°", f:"体感 -0° ~ 8°", n:"无降水", w2:"阵风 52 km/h", rain:false},
+ {d:"10/05", w:"周一", t:"浑源 3° ~ 17°", f:"体感 -2° ~ 12°", n:"无降水", w2:"阵风 39 km/h", rain:false}
+];
+
+const LAYERS=[
+ ["内层","速干长袖 T 或薄保暖内衣（Heattech 类），贴身穿。"],
+ ["中层","<b>抓绒衣 / 轻薄羽绒——必带。</b>10/04 云冈 6:30、10/05 悬空寺 8:00 都靠它。"],
+ ["外层","<b>防风</b>外套。三处阵风都到 40–70 km/h，<b>风比温度更伤人</b>。"],
+ ["下装","长裤 + 一条秋裤，两个早场必穿。"],
+ ["鞋","<b>防滑</b>运动鞋——云冈走 2.5 小时、古城走一整天、悬空寺台阶窄且陡。"],
+ ["配件","墨镜（UV 4–5 偏高）、围巾、<b>手套</b>（早上方向盘冰凉）。"]
+];
+
+const WXRISK=[
+ ["10/04 · 05:45 出门","大同 4–5°C、体感接近 0°C，云冈是露天景区，要待到 10:30。"],
+ ["10/05 · 08:00 悬空寺","浑源 3°C、体感 0°C，悬空寺建在翠屏峰峡谷风口，体感比气温更低；登临时风大、台阶易湿滑。"],
+ ["10/03 · 西城墙","官方规定<b>降雨天气晚间不开放</b>。而 10/03 降水预报两个模型差 8 倍（5.6mm vs 0.7mm）——<b>这一段有作废风险，见 Day 2 的 Plan B</b>。"],
+ ["电车续航","夜里 1–6°C 的低温 + 早晨开暖风，会再削一层续航（490 km 是常温数据）。<b>10/05 返津按补 2 次电规划。</b>"],
+ ["车内过夜","<b>别把矿泉水、饮料留在车里</b>，大同夜里接近 0°C 会冻裂瓶子。"]
 ];
 
 /* ============================================================
@@ -523,6 +588,23 @@ document.getElementById("todo").innerHTML = TODO.map((x,i)=>`<li class="${x.crit
   </li>`).join("");
 
 document.getElementById("tips").innerHTML = TIPS.map(([k,v])=>`<li><b>${esc(k)}</b>　${v}</li>`).join("");
+
+document.getElementById("wx").innerHTML = WX.map(x=>`<div class="wx-r">
+    <div class="wx-d">${x.d}<span>${x.w}</span></div>
+    <div class="wx-t">${x.t}<span>${x.f}</span></div>
+    <div class="wx-n">${x.rain?`<span class="rain">${x.n}</span>`:x.n}<br>${x.w2}</div>
+  </div>`).join("") +
+  `<div class="wx-r" style="padding-top:9px;padding-bottom:9px">
+     <div class="wx-d" style="font-size:11.5px;color:var(--fg3);font-weight:400">数据</div>
+     <div class="wx-t" style="font-size:11.5px;color:var(--fg3)">Open-Meteo · 已与 ECMWF 模型交叉比对</div>
+     <div class="wx-n" style="font-size:11px">大同海拔 1047m</div>
+   </div>`;
+
+document.getElementById("layers").innerHTML = LAYERS.map(([k,v])=>
+  `<div class="lyr"><div class="k">${esc(k)}</div><div class="v">${v}</div></div>`).join("");
+
+document.getElementById("wxrisk").innerHTML =
+  WXRISK.map(([k,v])=>`<div class="note">${k}：${v}</div>`).join("");
 
 /* ============================================================
    倒计时：绝对时刻，跨时区正确
