@@ -121,31 +121,14 @@ details.rt summary .rt-x{margin-left:auto;color:var(--fg3);font-size:11px}
 .rt-body .flow span{white-space:nowrap}
 
 ol.todo,ul.tips{list-style:none;margin:0;padding:0}
-ol.todo li{display:grid;grid-template-columns:22px 1fr;gap:11px;padding:12px 0;
-  border-bottom:1px solid var(--line2);font-size:14px;cursor:pointer;
-  -webkit-user-select:none;user-select:none;transition:opacity .12s}
+ol.todo li{display:grid;grid-template-columns:24px 1fr;gap:11px;padding:12px 0;
+  border-bottom:1px solid var(--line2);font-size:14px}
 ol.todo li:last-child{border-bottom:0}
-ol.todo li:active{opacity:.65}
-ol.todo .ck{width:20px;height:20px;border-radius:6px;border:1.6px solid var(--line);
-  flex:none;margin-top:1px;background:var(--bg);display:flex;align-items:center;
-  justify-content:center;transition:background .12s,border-color .12s}
+ol.todo .ix{font-size:11px;font-weight:700;color:var(--fg3);font-variant-numeric:tabular-nums;padding-top:2px}
 ol.todo .bd{min-width:0}
 ol.todo .bd .d{font-size:12px;color:var(--fg3);margin-top:4px;line-height:1.55}
+ol.todo li.crit .ix{color:var(--warn)}
 ol.todo li.crit .t{color:var(--warn);font-weight:600}
-/* done 规则必须排在 crit 之后：同权重下靠源序覆盖 */
-ol.todo li.done .t{color:var(--fg3);text-decoration:line-through;font-weight:400}
-ol.todo li.done .d{opacity:.5;text-decoration:none}
-ol.todo li.done .ck{background:var(--ok);border-color:var(--ok)}
-ol.todo li.done .ck::after{content:"✓";color:var(--bg2);font-size:13px;font-weight:700;line-height:1}
-ol.todo li.done{opacity:.72}
-ol.todo li.done:active{opacity:.5}
-.todo-cnt{margin-left:auto;font-size:11px;font-weight:650;color:var(--fg3);
-  font-variant-numeric:tabular-nums;letter-spacing:.04em}
-.todo-cnt.all{color:var(--ok)}
-.todo-hint{font-size:11px;color:var(--fg3);margin-top:9px;display:flex;gap:10px;align-items:center}
-.todo-hint button{font:inherit;font-size:11px;color:var(--fg3);background:none;
-  border:1px solid var(--line);border-radius:7px;padding:3px 9px;cursor:pointer}
-.todo-hint button:active{opacity:.6}
 ul.tips li{padding:9px 0 9px 17px;position:relative;font-size:13.5px;color:var(--fg2);border-bottom:1px solid var(--line2)}
 ul.tips li:last-child{border-bottom:0}
 ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:5px;height:5px;border-radius:50%;background:var(--fg3)}
@@ -170,26 +153,6 @@ ul.tips li b{color:var(--fg);font-weight:600}
 .lyr .k{font-size:11.5px;font-weight:700;color:var(--fg3);letter-spacing:.06em;white-space:nowrap;padding-top:2px}
 .lyr .v{font-size:13.5px;color:var(--fg2)}
 .lyr .v b{color:var(--fg);font-weight:630}
-
-/* eat */
-.eat-g{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);
-  padding:13px 15px 4px;margin-bottom:10px}
-.eat-gh{font-size:11.5px;font-weight:680;color:var(--fg3);letter-spacing:.06em;
-  padding-bottom:9px;margin-bottom:4px;border-bottom:1px solid var(--line2)}
-.eat-i{padding:10px 0}
-.eat-i+.eat-i{border-top:1px dashed var(--line2)}
-.eat-t{font-size:14.5px;font-weight:640;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 9px}
-.eat-t a.pl{border-bottom:1px dashed var(--fg3)}
-.eat-t a.pl::after{content:"↗";font-size:10px;color:var(--fg3);margin-left:2px;vertical-align:super}
-.eat-p{font-size:10.5px;font-weight:600;color:var(--ok);background:var(--okbg);
-  padding:2px 7px;border-radius:20px;white-space:nowrap}
-.eat-d{font-size:12.5px;color:var(--fg2);margin-top:5px}
-.eat-w{font-size:12px;color:var(--fg3);margin-top:4px;line-height:1.55}
-.eat-w b{color:var(--fg);font-weight:600}
-.eat-g.cut .eat-t a.pl{color:var(--fg3);text-decoration:line-through;border-bottom-color:var(--fg3)}
-.eat-g.cut .eat-t a.pl::after{content:""}
-.eat-g.cut .eat-p{color:var(--warn);background:var(--warnbg)}
-.eat-g.cut .eat-w,.eat-g.cut .eat-d{opacity:.72}
 
 footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--fg3);line-height:1.8}
 footer b{color:var(--fg2);font-weight:600}
@@ -278,14 +241,6 @@ footer b{color:var(--fg2);font-weight:600}
 </section>
 
 <section>
-  <div class="sec-h"><h2>吃什么</h2><span class="en">Where to eat</span></div>
-  <div id="eat"></div>
-  <div class="note q" style="margin-top:10px">
-    <b>这份清单的店名和地址可信，坐标不可用。</b>8 家店的纬度全挤在 287 米的带子里，而且每家都比它自己那条街偏北 675–1338 米——<b>偏差还各不相同</b>。纯粹的坐标系问题偏差是恒定的，不会一店一个值。所以本页所有餐厅一律走高德<b>关键词搜索</b>链接，不写坐标。
-  </div>
-</section>
-
-<section>
   <div class="sec-h"><h2>天气与穿衣</h2><span class="en">Weather</span></div>
   <div class="wx" id="wx"></div>
   <div class="layers" id="layers"></div>
@@ -293,12 +248,8 @@ footer b{color:var(--fg2);font-weight:600}
 </section>
 
 <section>
-  <div class="sec-h"><h2>待办清单</h2><span class="en">To-do</span><span class="todo-cnt" id="todoCnt"></span></div>
+  <div class="sec-h"><h2>待办清单</h2><span class="en">To-do</span></div>
   <div class="box"><ol class="todo" id="todo"></ol></div>
-  <div class="todo-hint">
-    <span>点一下整行即可勾掉 · 勾选状态存在这台设备上</span>
-    <button id="todoReset" type="button">重置</button>
-  </div>
 </section>
 
 <section>
@@ -315,7 +266,6 @@ footer b{color:var(--fg2);font-weight:600}
   大同城墙：降雨天气晚间不开放（大同城墙景区公告）<br>
   天气：Open-Meteo 数值预报，已与 ECMWF 模式及 wttr.in 交叉比对<br>
   恒山游客中心坐标：高德官方 POI B0KAOH3084（GCJ-02，未做 WGS 转换）<br>
-  餐厅坐标：来源清单的 8 家店纬度仅跨 287 米、且各比所在街道偏北 675–1338 米（偏差不恒定 → 非坐标系问题），判定不可用，一律改用高德关键词搜索<br>
   页面时间锚点取自你的订单：云冈 10/4 6:30–10:30 场 · 悬空寺 10/5 8:00 场
 </footer>
 
@@ -393,16 +343,6 @@ function pl(key,label){
   return '<a class="pl" href="'+pointUrl(key)+'" rel="noopener">'+(label||POI[key].name)+'</a>';
 }
 
-/* 餐厅一律走高德关键词搜索链接：清单给的坐标经交叉核对不可用，
-   搜索链接不依赖坐标，永远落在高德自己的 POI 上 */
-function eatUrl(name,city){
-  return "https://uri.amap.com/search?keyword="+encodeURIComponent(name)
-        +"&city="+encodeURIComponent(city||"大同")+"&callnative=1&src="+SRC;
-}
-function epl(name,city,label){
-  return '<a class="pl" href="'+eatUrl(name,city)+'" rel="noopener">'+(label||name)+'</a>';
-}
-
 /* ============================================================
    已确认（只有时间/地址/电话，不含任何订单号、证件号、房间号）
    ============================================================ */
@@ -414,7 +354,7 @@ const CONFIRMED=[
         ["退房","10/05（周一）12:00 前"],
         ["房型","灵动豪华双床房 · 40㎡ · 双床"],
         ["停车","免费停车 · <b>酒店自带电动车充电</b>"],
-        ["早餐","10/03、10/04、10/05 各含 2 份（10/02 无）<br><b>但 10/04、10/05 你 05:45 / 06:00 就走，这两天吃不上</b>"]],
+        ["早餐","10/03、10/04、10/05 各含 2 份（10/02 无）"]],
   note:"10/05 你 06:00 就要走，退房请在前一晚跟前台说好快速退房或提前结算。",
   q:false, poi:"hotel"},
 
@@ -475,8 +415,7 @@ const DAYS=[
    {t:"15:30", x:"参观 "+pl("museum"), d:"距酒店约 1.6–2.3 km。", hi:true},
    {t:"16:00", x:"⛔ 博物馆停止入场",
     d:"硬截止线——如果 15:00 还没进大同市区，先直奔博物馆，行李留车上。", hi:true},
-   {t:"18:30", x:"晚饭（进古城）· "+epl("喜晋道面馆","大同"),
-    d:"华严寺广场 · 清远街古城B区1号。御东→古城约 8 km / 20 分钟。<b>一碗猪肉刀削面 38 元</b>，早中晚都营业、不排队——刚落地最稳的一顿。饭后在清远街走一圈踩点：明早的福兴斋（教场街）离这儿只有 600 米。"},
+   {t:"18:00", x:"晚饭 · "+pl("wenying","文瀛湖生态公园"), d:"距酒店约 2.9 km，适合饭后散步。"},
    {t:"21:00", x:"酒店充电过夜", d:"明天 05:45 就要出门，务必充到接近满电。"}
   ],
   route:{to:"museum", via:null,
@@ -487,23 +426,18 @@ const DAYS=[
   color:"var(--d2)",
   marks:[['t2','全天免长途']],
   tl:[
-   {t:"08:00", x:"早餐 · "+epl("福兴斋烧麦","大同")+"（教场街）",
-    d:"羊肉烧麦 + 羊杂粉汤 ≈38 元。<b>清真老店、只做早市，去晚了卖完，8 点必须到。</b>吃完走到华严寺仅 600 米 / 10 分钟。", hi:true},
    {t:"09:00", x:pl("huayan"),
     d:"大西街一带。夏季开放 08:00–18:30（18:00 停票）——以现场公告为准。"},
    {t:"11:00", x:pl("jiulong"),
     d:"门票 10 元，08:30–17:30。全国现存规模最大、年代最早的琉璃九龙壁。从华严寺步行约 20 分钟。"},
-   {t:"12:30", x:"午饭 · "+epl("顺意凉粉","大同")+" + "+epl("小媳妇凉粉","大同")+"（鼓楼东街）",
-    d:"从九龙壁过来仅 216 米 / 4 分钟；两家店<b>斜对面</b>，各来一小份对比口味（18 + 17 元）。⚠️ <b>凉粉不顶饱</b>，你下午还要走 4 小时——务必加锅盔饼 / 卤蛋；还不够就补喜晋道刀削面（离这儿 600 米）。"},
+   {t:"12:30", x:"古城内午饭", d:"从九龙壁步行可达鼓楼 / 仿古街一带。"},
    {t:"14:30", x:pl("shanhua"),
     d:"门票 40 元，08:30–17:00。比华严寺清静，重点看大雄宝殿与三圣殿塑像壁画，寺前有明代五龙壁。"},
    {t:"17:30", x:pl("qingyuan","西城墙 · 清远门"),
     d:"城墙春秋季 07:00–22:00，四门（和阳 / 永泰 / 清远 / 武定）都能上下。夜景是古城最值得的一处，所以放最后。⚠️ 官方规定<b>降雨天气晚间不开放</b>，而 10/03 的降水预报模型之间差 8 倍，这一段有作废风险。", hi:true},
    {t:"Plan B", x:"城墙挪到 10/02 傍晚（预测无雨）",
     d:"若 10/03 当天确认有雨：跳过城墙，改在鼓楼 / 仿古街夜逛；或者 10/02 到得早就当晚先上墙看夜景，Day 2 就不用赶。"},
-   {t:"19:30", x:"晚饭+夜宵合并 · "+epl("胖来来兔头","大同")+"（帅府街 108 号）",
-    d:"从清远门过来 657 米 / 11 分钟。麻辣兔头 + 羊杂 ≈40 元。<b>兔头按个卖、羊杂一碗，天生一个人吃的东西。</b>不敢吃兔头就只点羊杂粉汤。", hi:true},
-   {t:"21:00", x:"回酒店充电", d:"市区往返很短，电量基本不动。"}
+   {t:"20:00", x:"回酒店充电", d:"市区往返很短，电量基本不动。"}
   ],
   route:{to:"qingyuan", via:"shanhua",
    flow:'华严寺 → 九龙壁 → 善化寺 → 清远门（西城墙夜景）',
@@ -521,9 +455,7 @@ const DAYS=[
    {t:"12:30", x:"应县木塔",
     d:"08:00–17:00，16:30 停止售票。世界现存最高、最古老的木构塔（约 67 m），已不允许登塔。"},
    {t:"14:30", x:"返程回大同", d:"约 70–85 km / 约 1 小时。"},
-   {t:"16:00", x:"回酒店补电", d:"全天约 215 km，一次充电绰绰有余。"},
-   {t:"19:00", x:"晚饭 · "+epl("龙聚祥烧麦馆","大同")+"（鼓楼西街）",
-    d:"唯一保留的正餐店——是<b>烧麦馆不是大酒楼</b>。一个人点法：<b>1 笼羊肉雪花烧麦 + 1 份黄米凉糕 + 1 碗羊杂粉汤</b>，实际约 50 元。⚠️ 饭点排队严重，<b>线上提前取号</b>；不想等就直接回喜晋道吃刀削面。"}
+   {t:"16:00", x:"回酒店补电 · 古城晚饭", d:"全天约 215 km，一次充电绰绰有余。"}
   ],
   route:{to:"yingxian", via:"yungang",
    flow:'酒店 → 云冈石窟 → 应县木塔 → 回大同酒店',
@@ -539,12 +471,10 @@ const DAYS=[
     d:"售票窗口与摆渡车比景区开门早半小时开始（≈07:30）。<b>游客中心到悬空寺直线约 6 km</b>，摆渡车单程按 15–20 分钟预留，往返要留 40 分钟。", hi:true},
    {t:"08:00", x:"悬空寺登临（8:00 场）",
     d:"登临约 1.5–2 小时。悬空寺台阶一次仅容 1 人通行，人多时排队会拖长。"},
-   {t:"10:00", x:"悬空寺下来 · 早午餐 · "+epl("浑源凉粉","浑源")+"（浑源县城）",
-    d:"浑源是凉粉的<b>原产地</b>，县城里吃最对口（清单里顺意 / 小媳妇卖的招牌就是「浑源凉粉」）；配家常饼 / 羊杂更顶。⚠️ 你 06:00 出门、酒店早餐 6:30 才开——<b>这是你这两天的第一顿正经饭。</b>"},
-   {t:"11:00", x:"出发返津", d:"约 500 km / 7 小时。<b>比原计划（10:30）晚 30 分钟，到天津约 21:00。</b>低温 + 开暖风会再削续航（490 km 是常温数据），<b>按补 2 次电规划</b>，别按 1 次算。", hi:true},
+   {t:"10:30", x:"出发返津", d:"约 500 km / 7 小时。低温 + 开暖风会再削续航（490 km 是常温数据），<b>按补 2 次电规划</b>，别按 1 次算。", hi:true},
    {t:"~12:30", x:"第 1 次补电 + 午饭", d:"同样走河北线回津。国庆服务区排队，留足余量。"},
    {t:"~16:00", x:"第 2 次补电", d:"若前一段跑得顺、电量充裕，这一站可以跳过。"},
-   {t:"20:00–21:00", x:"抵达天津", d:"这是全程最长的一天，全天约 13.5 小时。"}
+   {t:"19:00–20:00", x:"抵达天津", d:"这是全程最长的一天，全天约 13 小时。"}
   ],
   route:{to:"center", via:null,
    flow:'大同酒店 → 北岳恒山游客中心（停车换摆渡车）→ 悬空寺 → 返天津',
@@ -559,8 +489,6 @@ const TODO=[
   d:"云冈石窟、悬空寺登临、大同市博物馆。景区排队处信号差，翻聊天记录会耽误时间。"},
  {t:"出发前：把装备装车", crit:true,
   d:"身份证原件（云冈/悬空寺/博物馆全部实名刷证）· 轻薄羽绒/抓绒 · 防风外套 · 秋裤 · 防滑运动鞋 · 手套 · 折叠伞 + 雨衣（10/03 可能下雨，悬空寺台阶窄打不了伞）· 墨镜。"},
- {t:"出发前一晚（10/01）：在便利店买面包牛奶放车上", crit:true,
-  d:"10/04 你 05:45 出门、10/05 你 06:00 出门，而酒店早餐 6:30 才开——<b>这两天都吃不上</b>。前一晚买好放车上最稳，别指望路上现找。"},
  {t:"出发前：车上备除霜刮片和玻璃水", crit:false,
   d:"大同夜里最低 1–6°C，早上车窗可能结霜；10/04 你 05:45 就出门，留出 5 分钟清玻璃。"},
  {t:"出发前：清空车里的矿泉水和饮料", crit:false,
@@ -590,59 +518,7 @@ const TIPS=[
  ["古城停车","古城内路窄、车位紧张，建议停酒店或古城外围停车场，再步行进城。"],
  ["充电","酒店自带充电桩，晚上回店插上最省心；宣大高速化稍营、阳原服务区各有 4 个快充，宣化服务区双侧共 8 个。"],
  ["退票规则","恒山 / 悬空寺线上票可在游览日之前的每天 07:25–22:00 退，过期不退。"],
- ["早餐空档","10/04 05:45、10/05 06:00 出门，而酒店早餐 6:30 才开——<b>这两天都吃不上</b>。出发前一晚在便利店买好面包牛奶放车上。"],
- ["一个人点菜","大同烧麦按<b>笼</b>卖、兔头按<b>个</b>卖、羊杂按<b>碗</b>卖、凉粉按<b>小份</b>卖——这几样天生适合一个人。铜锅类和「饭庄」的硬菜才是必须凑桌的。"],
- ["咸度与调味","大同羊杂偏咸，口味清淡记得让老板少盐；浑源凉粉一定要加本地陈醋才够味。"],
- ["排队","龙聚祥、凤临阁这类名店节假日排队严重，可线上提前取号（大众点评 / 美团）。福兴斋只做早市，8 点前去最稳。"],
- ["餐厅坐标","本页餐厅<b>只走高德关键词搜索链接，不写坐标</b>——来源清单的坐标经交叉核对不可用（详见「吃什么」下方说明）。"],
  ["实时信息","门票与开放时间可能因客流临时调整，以景区现场公告和高德实时信息为准。"]
-];
-
-/* ============================================================
-   吃什么（坐标全部留空 → 一律走高德关键词搜索）
-   ============================================================ */
-const EAT=[
- {slot:"D1 · 10/02 周五 · 晚饭（进古城）", items:[
-   {name:"喜晋道面馆", city:"大同", meta:"早中晚 · 人均 38",
-    dishes:"猪肉刀削面 / 羊肉臊子削面 / 黄米凉糕 / 卤蛋",
-    why:"华严寺广场（清远街古城B区1号）。一碗面解决，不排队、出餐快——刚落地最稳的一顿。饭后在清远街走一圈踩点，明早的福兴斋离这儿 600 米。"}
- ]},
- {slot:"D2 · 10/03 周六 · 早餐", items:[
-   {name:"福兴斋烧麦", city:"大同", meta:"只做早市 · 人均 38",
-    dishes:"羊肉烧麦 / 羊杂粉汤",
-    why:"教场街。<b>清真老店，只做早市、晚了卖完，必须 8 点去。</b>吃完走到华严寺仅 600 米 / 10 分钟。"}
- ]},
- {slot:"D2 · 10/03 周六 · 午饭", items:[
-   {name:"顺意凉粉", city:"大同", meta:"小吃 · 人均 18",
-    dishes:"浑源凉粉 / 豆干 / 莲花豆",
-    why:"鼓楼东街 15 号。古城老牌浑源凉粉，辣椒油很香，可以加卤蛋。从九龙壁过来仅 216 米 / 4 分钟。"},
-   {name:"小媳妇凉粉", city:"大同", meta:"小吃 · 人均 17",
-    dishes:"浑源凉粉 / 锅盔饼",
-    why:"就在顺意<b>斜对面</b>，两家是大同凉粉的两大代表，各来一小份对比口味。⚠️ <b>凉粉不顶饱</b>，务必加锅盔饼 / 卤蛋。"}
- ]},
- {slot:"D2 · 10/03 周六 · 晚饭 + 夜宵", items:[
-   {name:"胖来来兔头", city:"大同", meta:"夜宵 · 人均 40",
-    dishes:"麻辣兔头 / 五香兔头 / 羊杂",
-    why:"帅府街 108 号，三十多年老店。<b>兔头按个卖、羊杂一碗，天生就是一个人吃的东西。</b>不敢吃兔头就只点羊杂粉汤。从清远门过来 657 米 / 11 分钟。"}
- ]},
- {slot:"D3 · 10/04 周日 · 晚饭", items:[
-   {name:"龙聚祥烧麦馆", city:"大同", meta:"可选正餐 · 人均 65（solo 约 50）",
-    dishes:"羊肉雪花烧麦 / 老大同过油肉 / 黄米凉糕 / 羊杂粉汤",
-    why:"鼓楼西街与永泰街交叉口西北角。它是<b>烧麦馆不是大酒楼</b>，一个人点 1 笼烧麦 + 1 份凉糕完全成立。⚠️ 饭点排队严重，<b>线上提前取号</b>；不想等就直接回喜晋道吃刀削面。"}
- ]},
- {slot:"D4 · 10/05 周一 · 早午餐（浑源）", items:[
-   {name:"浑源凉粉", city:"浑源", meta:"当地小吃",
-    dishes:"凉粉 / 家常饼 / 羊杂",
-    why:"浑源是凉粉的<b>原产地</b>，县城里吃最对口。你 06:00 出门、酒店早餐 6:30 才开——<b>这是你这两天第一顿正经饭。</b>"}
- ]},
- {slot:"已剔除 · 一个人不值得去", cls:"cut", items:[
-   {name:"凤临阁", city:"大同", meta:"人均 85 · 剔除",
-    dishes:"百花羊肉烧麦 / 沙棘黄米凉糕 / 髓油油糕",
-    why:"它本身就是个仿古景点，团客和打卡客扎堆，节假日排队最长。一个人为一顿饭排 1 小时队，性价比最低。"},
-   {name:"和阳居老大同饭庄", city:"大同", meta:"人均 68 · 剔除",
-    dishes:"什锦铜锅 / 扒肉条 / 什锦铜锅",
-    why:"招牌「什锦铜锅」是 2–3 人份的锅子，一个人点一个就饱、其余全浪费；「饭庄」普遍得凑桌才划得来。"}
- ]}
 ];
 
 /* ============================================================
@@ -717,52 +593,12 @@ document.getElementById("days").innerHTML = DAYS.map(d=>{
   </div>`;
 }).join("");
 
-/* 待办勾选：状态存本机 localStorage（单人页面；多设备共用会各自不同，见 skill 说明） */
-const TODO_KEY="datong-trip-todo-v1";
-let todoDone={};
-try{ todoDone=JSON.parse(localStorage.getItem(TODO_KEY)||"{}")||{}; }catch(e){ todoDone={}; }
-
-function renderTodo(){
-  const ol=document.getElementById("todo");
-  ol.innerHTML = TODO.map(x=>{
-    const on=!!todoDone[x.t];
-    return `<li class="${x.crit?"crit":""}${on?" done":""}" data-k="${esc(x.t)}">`
-      + `<span class="ck"></span>`
-      + `<div class="bd"><div class="t">${esc(x.t)}</div><div class="d">${x.d}</div></div></li>`;
-  }).join("");
-  const n=TODO.filter(x=>todoDone[x.t]).length;
-  const cnt=document.getElementById("todoCnt");
-  cnt.textContent=(n===TODO.length?"全部完成 ":"")+n+" / "+TODO.length;
-  cnt.className="todo-cnt"+(n===TODO.length&&n>0?" all":"");
-}
-renderTodo();
-
-document.getElementById("todo").addEventListener("click", ev=>{
-  const li=ev.target.closest("li[data-k]");
-  if(!li) return;
-  const k=li.getAttribute("data-k");
-  if(todoDone[k]) delete todoDone[k]; else todoDone[k]=1;
-  try{ localStorage.setItem(TODO_KEY, JSON.stringify(todoDone)); }catch(e){}
-  renderTodo();
-});
-
-document.getElementById("todoReset").addEventListener("click", ()=>{
-  todoDone={};
-  try{ localStorage.removeItem(TODO_KEY); }catch(e){}
-  renderTodo();
-});
+document.getElementById("todo").innerHTML = TODO.map((x,i)=>`<li class="${x.crit?"crit":""}">
+    <div class="ix">${String(i+1).padStart(2,"0")}</div>
+    <div class="bd"><div class="t">${x.t}</div><div class="d">${x.d}</div></div>
+  </li>`).join("");
 
 document.getElementById("tips").innerHTML = TIPS.map(([k,v])=>`<li><b>${esc(k)}</b>　${v}</li>`).join("");
-
-document.getElementById("eat").innerHTML = EAT.map(g=>`
-  <div class="eat-g${g.cls?" "+g.cls:""}">
-    <div class="eat-gh">${esc(g.slot)}</div>
-    ${g.items.map(i=>`<div class="eat-i">
-      <div class="eat-t"><a class="pl" href="${eatUrl(i.name,i.city)}" rel="noopener">${esc(i.name)}</a><span class="eat-p">${esc(i.meta)}</span></div>
-      <div class="eat-d">${esc(i.dishes)}</div>
-      <div class="eat-w">${i.why}</div>
-    </div>`).join("")}
-  </div>`).join("");
 
 document.getElementById("wx").innerHTML = WX.map(x=>`<div class="wx-r">
     <div class="wx-d">${x.d}<span>${x.w}</span></div>
@@ -788,19 +624,15 @@ const EVENTS=[
  ["2026-10-02T07:00:00+08:00","从天津东丽湖出发"],
  ["2026-10-02T15:00:00+08:00","抵达大同 · 入住希尔顿惠庭"],
  ["2026-10-02T15:30:00+08:00","参观大同市博物馆"],
- ["2026-10-02T18:30:00+08:00","古城晚饭 · 喜晋道面馆"],
  ["2026-10-02T16:00:00+08:00","⛔ 博物馆停止入场"],
- ["2026-10-03T08:00:00+08:00","早餐 · 福兴斋烧麦（教场街）"],
  ["2026-10-03T09:00:00+08:00","大同古城 · 华严寺"],
- ["2026-10-03T19:30:00+08:00","帅府街夜宵 · 胖来来兔头"],
  ["2026-10-04T05:45:00+08:00","出发前往云冈石窟"],
  ["2026-10-04T06:30:00+08:00","云冈石窟入园（6:30–10:30 场）"],
  ["2026-10-04T12:30:00+08:00","应县木塔"],
  ["2026-10-05T06:00:00+08:00","退房出发 · 恒山游客中心"],
  ["2026-10-05T08:00:00+08:00","悬空寺登临（8:00 场）"],
- ["2026-10-05T10:00:00+08:00","浑源县城 · 凉粉早午餐"],
- ["2026-10-05T11:00:00+08:00","出发返津"],
- ["2026-10-05T21:00:00+08:00","抵达天津 · 行程结束"]
+ ["2026-10-05T10:30:00+08:00","出发返津"],
+ ["2026-10-05T20:00:00+08:00","抵达天津 · 行程结束"]
 ].map(e=>({ms:new Date(e[0]).getTime(), l:e[1]}));
 
 const fmtBJ=new Intl.DateTimeFormat("zh-CN",{timeZone:"Asia/Shanghai",
