@@ -3,27 +3,575 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>大同 · 待建</title>
+<meta name="theme-color" content="#f6f4f0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111214" media="(prefers-color-scheme: dark)">
+<title>天津 → 大同 · 10.02–10.05</title>
 <style>
-  :root { color-scheme: light dark; }
-  body {
-    margin: 0; min-height: 100vh; display: grid; place-items: center;
-    font: 16px/1.6 -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
-    background: #f6f4f0; color: #1c1c1e;
+:root{
+  color-scheme: light dark;
+  --bg:#f6f4f0; --bg2:#ffffff; --fg:#191a1c; --fg2:#5d6066; --fg3:#8a8e95;
+  --line:#e2ded6; --line2:#efece6;
+  --d1:#c8552f; --d2:#2f6fc8; --d3:#7a4fc8; --d4:#2f8f6a;
+  --warn:#b4451f; --warnbg:#fdf1ea;
+  --ok:#2f7a52; --okbg:#eef7f1;
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#111214; --bg2:#1a1c1f; --fg:#f2f2f4; --fg2:#a8acb3; --fg3:#787c84;
+    --line:#2b2e33; --line2:#232629;
+    --d1:#e8764a; --d2:#5c99e8; --d3:#a882e8; --d4:#4dbd92;
+    --warn:#ff8a5c; --warnbg:#2b1c15;
+    --ok:#5cc48d; --okbg:#152219;
   }
-  @media (prefers-color-scheme: dark) { body { background: #131313; color: #f2f2f7; } }
-  .box { max-width: 22em; padding: 2rem; text-align: center; }
-  h1 { font-size: 1.5rem; margin: 0 0 .6rem; letter-spacing: .04em; }
-  p  { margin: .3rem 0; opacity: .65; font-size: .9rem; }
-  code { font-size: .8rem; opacity: .5; }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--fg);
+  font:16px/1.62 -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  padding:0 0 4rem;overflow-x:hidden;
+}
+.wrap{max-width:600px;margin:0 auto;padding:0 16px}
+a{color:inherit;text-decoration:none}
+
+header{padding:30px 0 20px}
+.kicker{font-size:12px;letter-spacing:.22em;color:var(--fg3);text-transform:uppercase}
+h1{font-size:26px;line-height:1.28;margin:10px 0 8px;letter-spacing:-.01em;font-weight:700}
+h1 .arw{color:var(--fg3);font-weight:400;padding:0 2px}
+.sub{font-size:13.5px;color:var(--fg2);display:flex;flex-wrap:wrap;gap:6px 14px}
+.sub b{font-weight:600;color:var(--fg)}
+
+section{margin-top:30px}
+.sec-h{display:flex;align-items:baseline;gap:10px;margin:0 0 13px}
+.sec-h h2{font-size:15px;margin:0;letter-spacing:.05em;font-weight:650}
+.sec-h .en{font-size:10.5px;letter-spacing:.18em;color:var(--fg3);text-transform:uppercase}
+
+.now{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px 18px 16px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.now .lbl{font-size:11px;letter-spacing:.2em;color:var(--fg3);text-transform:uppercase}
+.now .ev{font-size:19px;font-weight:650;margin:7px 0 2px;letter-spacing:-.01em}
+.now .when{font-size:12.5px;color:var(--fg2);font-variant-numeric:tabular-nums}
+.cd{display:flex;gap:8px;margin-top:15px}
+.cd .u{flex:1;background:var(--bg);border:1px solid var(--line2);border-radius:10px;
+  padding:9px 4px 7px;text-align:center}
+.cd .n{font-size:23px;font-weight:680;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1.1}
+.cd .t{font-size:10px;color:var(--fg3);letter-spacing:.12em;margin-top:3px}
+.now.done .cd{display:none}
+.now.done .ev::after{content:" ✓";font-size:15px;color:var(--ok)}
+.tz{margin-top:12px;font-size:11px;color:var(--fg3)}
+
+.mapbox{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);padding:10px 6px 4px;overflow:hidden}
+.mapbox svg{display:block;width:100%;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:5px 14px;padding:4px 12px 12px;font-size:11.5px;color:var(--fg2)}
+.legend i{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);
+  padding:15px 16px;margin-bottom:10px}
+.card .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.card .nm{font-size:15.5px;font-weight:640;letter-spacing:-.01em}
+.card .tag{font-size:10.5px;padding:3px 8px;border-radius:20px;white-space:nowrap;
+  background:var(--okbg);color:var(--ok);font-weight:600}
+.card .tag.w{background:var(--warnbg);color:var(--warn)}
+.card dl{margin:10px 0 0;display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:13px}
+.card dt{color:var(--fg3);white-space:nowrap}
+.card dd{margin:0;color:var(--fg2)}
+.card dd b{color:var(--fg);font-weight:600}
+.note{font-size:12.5px;color:var(--warn);margin:9px 0 0;padding:8px 10px;background:var(--warnbg);border-radius:9px}
+.note.q{color:var(--fg2);background:var(--bg);border:1px solid var(--line2)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.btn{font-size:12.5px;padding:7px 13px;border-radius:9px;border:1px solid var(--line);
+  background:var(--bg);color:var(--fg);font-weight:520;display:inline-flex;align-items:center;gap:5px}
+.btn.p{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn:active{opacity:.6}
+
+.day{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:11px;overflow:hidden}
+.day>.top{display:flex;align-items:center;gap:11px;padding:14px 16px;border-bottom:1px solid var(--line2)}
+.day .bar{width:3px;height:34px;border-radius:3px;flex:none}
+.day .dn{font-size:11px;letter-spacing:.18em;color:var(--fg3);text-transform:uppercase}
+.day .dt{font-size:15.5px;font-weight:650;letter-spacing:-.01em;margin-top:1px}
+.day .km{margin-left:auto;font-size:11.5px;color:var(--fg3);font-variant-numeric:tabular-nums;text-align:right}
+.day ul.marks{list-style:none;margin:0;padding:10px 16px 0;display:flex;gap:6px;flex-wrap:wrap}
+.day .term{font-size:10.5px;padding:2px 7px;border-radius:6px;font-weight:600}
+.day .term.t1{background:var(--warnbg);color:var(--warn)}
+.day .term.t2{background:var(--okbg);color:var(--ok)}
+
+.tl{list-style:none;margin:0;padding:6px 16px 14px}
+.tl li{display:grid;grid-template-columns:52px 1fr;gap:12px;padding:9px 0}
+.tl li+li{border-top:1px dashed var(--line2)}
+.tl .tm{font-size:13px;font-weight:620;color:var(--fg2);font-variant-numeric:tabular-nums;padding-top:1px}
+.tl .tx{font-size:14px;min-width:0}
+.tl .tx .t{font-weight:560}
+.tl .tx .d{font-size:12px;color:var(--fg3);margin-top:3px;line-height:1.5}
+.tl .tx a.pl{color:var(--fg);border-bottom:1px dashed var(--fg3);font-weight:560}
+.tl .tx a.pl::after{content:"↗";font-size:10px;color:var(--fg3);margin-left:2px;vertical-align:super}
+.tl li.hi{background:var(--warnbg);margin:0 -16px;padding:9px 16px}
+.tl li.hi .tm{color:var(--warn)}
+
+details.rt{border-top:1px solid var(--line2)}
+details.rt summary{list-style:none;cursor:pointer;padding:11px 16px;font-size:12.5px;color:var(--fg2);
+  display:flex;align-items:center;gap:7px;font-weight:520}
+details.rt summary::-webkit-details-marker{display:none}
+details.rt summary::before{content:"◎";color:var(--fg3);font-size:12px}
+details.rt[open] summary::before{content:"◉"}
+details.rt summary .rt-x{margin-left:auto;color:var(--fg3);font-size:11px}
+.rt-body{padding:2px 16px 15px}
+.rt-body p{margin:0 0 10px;font-size:12.5px;color:var(--fg2)}
+.rt-body .flow{font-size:12.5px;color:var(--fg2);margin:0 0 12px;word-break:break-word}
+.rt-body .flow span{white-space:nowrap}
+
+ol.todo,ul.tips{list-style:none;margin:0;padding:0}
+ol.todo li{display:grid;grid-template-columns:24px 1fr;gap:11px;padding:12px 0;
+  border-bottom:1px solid var(--line2);font-size:14px}
+ol.todo li:last-child{border-bottom:0}
+ol.todo .ix{font-size:11px;font-weight:700;color:var(--fg3);font-variant-numeric:tabular-nums;padding-top:2px}
+ol.todo .bd{min-width:0}
+ol.todo .bd .d{font-size:12px;color:var(--fg3);margin-top:4px;line-height:1.55}
+ol.todo li.crit .ix{color:var(--warn)}
+ol.todo li.crit .t{color:var(--warn);font-weight:600}
+ul.tips li{padding:9px 0 9px 17px;position:relative;font-size:13.5px;color:var(--fg2);border-bottom:1px solid var(--line2)}
+ul.tips li:last-child{border-bottom:0}
+ul.tips li::before{content:"";position:absolute;left:2px;top:17px;width:5px;height:5px;border-radius:50%;background:var(--fg3)}
+ul.tips li b{color:var(--fg);font-weight:600}
+.box{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);padding:6px 16px}
+
+footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--fg3);line-height:1.8}
+footer b{color:var(--fg2);font-weight:600}
 </style>
 </head>
 <body>
-  <div class="box">
-    <h1>🚧 施工中</h1>
-    <p>天津 → 山西大同 · 2026.10.02 – 10.05</p>
-    <p>等行程材料就位后替换成正式页面</p>
-    <code>placeholder build</code>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Road trip · 2026</div>
+  <h1>天津 <span class="arw">→</span> 山西 大同</h1>
+  <div class="sub">
+    <span><b>10.02 – 10.05</b></span>
+    <span>4 天 3 晚</span>
+    <span>自驾 · 小鹏 MONA M03</span>
+    <span>全程约 <b>1,275 km</b></span>
   </div>
+</header>
+
+<section>
+  <div class="now" id="now">
+    <div class="lbl">此刻关注</div>
+    <div class="ev" id="evTxt">正在载入…</div>
+    <div class="when" id="evWhen"></div>
+    <div class="cd">
+      <div class="u"><div class="n" id="cdD">–</div><div class="t">天</div></div>
+      <div class="u"><div class="n" id="cdH">–</div><div class="t">时</div></div>
+      <div class="u"><div class="n" id="cdM">–</div><div class="t">分</div></div>
+      <div class="u"><div class="n" id="cdS">–</div><div class="t">秒</div></div>
+    </div>
+    <div class="tz">所有时间均为北京时间（UTC+8）· 倒计时按绝对时刻计算，跨时区打开同样准确</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>行程总览</h2><span class="en">Overview</span></div>
+  <div class="mapbox">
+    <svg viewBox="0 0 360 300" role="img" aria-label="行程路线示意图">
+      <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 266 L52 236 L80 254 L112 230 L150 262 L196 238 L236 266" stroke="var(--line)" stroke-width="1.4" opacity=".8"/>
+        <path d="M228 272 L268 244 L300 266 L332 248 L352 266" stroke="var(--line)" stroke-width="1.2" opacity=".6"/>
+
+        <path d="M318 96 C282 76 240 118 196 104 C160 92 138 108 112 100" stroke="var(--d1)" stroke-width="2.6"/>
+        <path d="M100 92 C88 82 76 86 74 98 C72 112 86 120 100 116 C114 112 118 100 106 92" stroke="var(--d2)" stroke-width="2.4"/>
+        <path d="M104 104 C80 96 54 62 38 66" stroke="var(--d3)" stroke-width="2.4"/>
+        <path d="M38 74 C44 132 66 200 96 232" stroke="var(--d3)" stroke-width="2.4" stroke-dasharray="5 4"/>
+        <path d="M104 236 C110 196 116 148 108 120" stroke="var(--d3)" stroke-width="2.4" stroke-dasharray="5 4"/>
+        <path d="M114 108 C150 150 168 186 196 212" stroke="var(--d4)" stroke-width="2.4"/>
+        <path d="M206 206 C246 232 288 176 318 108" stroke="var(--d4)" stroke-width="2.4" stroke-dasharray="5 4"/>
+
+        <circle cx="318" cy="96" r="6.5" fill="var(--d1)"/>
+        <circle cx="112" cy="100" r="6.5" fill="var(--d1)"/>
+        <circle cx="106" cy="100" r="2.6" fill="var(--bg2)"/>
+        <circle cx="38" cy="66" r="5.5" fill="var(--d3)"/>
+        <circle cx="104" cy="236" r="5.5" fill="var(--d3)"/>
+        <circle cx="200" cy="209" r="5.5" fill="var(--d4)"/>
+      </g>
+      <g font-size="12" font-weight="650" fill="var(--fg)">
+        <text x="316" y="80" text-anchor="middle">天津</text>
+        <text x="118" y="138" text-anchor="middle">大同 · 住宿</text>
+      </g>
+      <g font-size="11" fill="var(--fg2)">
+        <text x="40" y="52" text-anchor="middle">云冈石窟</text>
+        <text x="104" y="258" text-anchor="middle">应县木塔</text>
+        <text x="228" y="228" text-anchor="middle">悬空寺 · 浑源</text>
+      </g>
+    </svg>
+    <div class="legend">
+      <span><i style="background:var(--d1)"></i>D1 天津 → 大同</span>
+      <span><i style="background:var(--d2)"></i>D2 古城</span>
+      <span><i style="background:var(--d3)"></i>D3 云冈 + 应县</span>
+      <span><i style="background:var(--d4)"></i>D4 悬空寺 + 返津</span>
+      <span>虚线 = 返程 / 折返</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>已确认</h2><span class="en">Confirmed</span></div>
+  <div id="confirmed"></div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>逐日行程</h2><span class="en">Day by day</span></div>
+  <div id="days"></div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>待办清单</h2><span class="en">To-do</span></div>
+  <div class="box"><ol class="todo" id="todo"></ol></div>
+</section>
+
+<section>
+  <div class="sec-h"><h2>实用贴士</h2><span class="en">Notes</span></div>
+  <div class="box"><ul class="tips" id="tips"></ul></div>
+</section>
+
+<footer>
+  <b>核对过的关键事实</b><br>
+  国庆假期 10/1–10/7（国务院办公厅通知）· 高速免费 10/1–10/7（小型客车）<br>
+  云冈石窟：线上实名预约、可提前 7 日、无现场窗口（云冈研究院公告）<br>
+  悬空寺：登临需另购登临费，车辆停恒山游客中心换摆渡车（恒山景区官网）<br>
+  大同市博物馆：免费不免票、9:00–17:00、16:00 停止入场<br>
+  页面时间锚点取自你的订单：云冈 10/4 6:30–10:30 场 · 悬空寺 10/5 8:00 场
+</footer>
+
+</div>
+
+<script>
+/* ============================================================
+   坐标（WGS-84，来源 OpenStreetMap / Wikipedia），运行时转 GCJ-02
+   ============================================================ */
+const POI = {
+  yungang : {name:"云冈石窟",         city:"大同", wgs:[113.12250,40.11000]},
+  yingxian: {name:"应县木塔",         city:"朔州", wgs:[113.18194,39.56528]},
+  xkasi   : {name:"悬空寺",           city:"浑源", wgs:[113.70799,39.65970]},
+  shanhua : {name:"善化寺",           city:"大同", wgs:[113.29361,40.08611]},
+  jiulong : {name:"九龙壁",           city:"大同", wgs:[113.29694,40.09194]},
+  huayan  : {name:"华严寺",           city:"大同", wgs:[113.28804,40.09129]},
+  qingyuan: {name:"清远门",           city:"大同", wgs:[113.28497,40.09248]},
+  museum  : {name:"大同市博物馆",     city:"大同", wgs:[113.35778,40.08917]},
+  wenying : {name:"文瀛湖生态公园",   city:"大同", wgs:[113.37456,40.08446]},
+  /* 下面两点没有可靠公开坐标 → 走高德关键词搜索，不瞎给坐标 */
+  hotel   : {name:"大同平城希尔顿惠庭酒店", city:"大同", wgs:null},
+  center  : {name:"恒山游客中心",     city:"浑源", wgs:null}
+};
+
+/* WGS-84 -> GCJ-02 */
+const AX=6378245.0, EE=0.00669342162296594323;
+function tLat(x,y){let r=-100+2*x+3*y+0.2*y*y+0.1*x*y+0.2*Math.sqrt(Math.abs(x));
+  r+=(20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3;
+  r+=(20*Math.sin(y*Math.PI)+40*Math.sin(y/3*Math.PI))*2/3;
+  r+=(160*Math.sin(y/12*Math.PI)+320*Math.sin(y*Math.PI/30))*2/3;return r;}
+function tLon(x,y){let r=300+x+2*y+0.1*x*x+0.1*x*y+0.1*Math.sqrt(Math.abs(x));
+  r+=(20*Math.sin(6*x*Math.PI)+20*Math.sin(2*x*Math.PI))*2/3;
+  r+=(20*Math.sin(x*Math.PI)+40*Math.sin(x/3*Math.PI))*2/3;
+  r+=(150*Math.sin(x/12*Math.PI)+300*Math.sin(x/30*Math.PI))*2/3;return r;}
+function gcj(wgs){
+  if(!wgs) return null;
+  const lon=wgs[0], lat=wgs[1];
+  let dLat=tLat(lon-105,lat-35), dLon=tLon(lon-105,lat-35);
+  const rl=lat/180*Math.PI; let m=Math.sin(rl); m=1-EE*m*m;
+  const sm=Math.sqrt(m);
+  dLat=(dLat*180)/((AX*(1-EE))/(m*sm)*Math.PI);
+  dLon=(dLon*180)/(AX/sm*Math.cos(rl)*Math.PI);
+  return [ +(lon+dLon).toFixed(6), +(lat+dLat).toFixed(6) ];
+}
+
+/* 高德链接：端点与参数按官方 URI 文档 marker / search / navigation */
+const SRC="datong-trip";
+function pointUrl(key){
+  const p=POI[key], g=gcj(p.wgs);
+  if(g) return "https://uri.amap.com/marker?position="+g[0]+","+g[1]
+              +"&name="+encodeURIComponent(p.name)+"&callnative=1&src="+SRC;
+  return "https://uri.amap.com/search?keyword="+encodeURIComponent(p.name)
+        +"&city="+encodeURIComponent(p.city)+"&callnative=1&src="+SRC;
+}
+function navUrl(key, viaKey){
+  const p=POI[key], g=gcj(p.wgs);
+  let q = g ? "to="+g[0]+","+g[1]+","+encodeURIComponent(p.name)
+            : "to=,"+encodeURIComponent(p.name);
+  if(viaKey){
+    const v=POI[viaKey], gv=gcj(v.wgs);
+    if(gv) q += "&via="+gv[0]+","+gv[1]+","+encodeURIComponent(v.name);
+  }
+  q += "&mode=car&callnative=1&src="+SRC;
+  return "https://uri.amap.com/navigation?"+q;
+}
+function pl(key,label){
+  return '<a class="pl" href="'+pointUrl(key)+'" rel="noopener">'+(label||POI[key].name)+'</a>';
+}
+
+/* ============================================================
+   已确认（只有时间/地址/电话，不含任何订单号、证件号、房间号）
+   ============================================================ */
+const CONFIRMED=[
+ {nm:"大同平城希尔顿惠庭酒店", tag:"已订 · 3 晚", cls:"",
+  rows:[["地址","大同市平城区恒安街579号（恒安街 × 永安路 东北）"],
+        ["电话","+86 352 207 9999"],
+        ["入住","10/02（周五）14:00 后"],
+        ["退房","10/05（周一）12:00 前"],
+        ["房型","灵动豪华双床房 · 40㎡ · 双床"],
+        ["停车","免费停车 · <b>酒店自带电动车充电</b>"],
+        ["早餐","10/03、10/04、10/05 各含 2 份（10/02 无）"]],
+  note:"10/05 你 06:00 就要走，退房请在前一晚跟前台说好快速退房或提前结算。",
+  q:false, poi:"hotel"},
+
+ {nm:"大同市博物馆", tag:"已预约", cls:"",
+  rows:[["地址","大同市平城区文瀛湖街道太和路506号"],
+        ["电话","+86 352 2303518（票务）"],
+        ["开放","09:00–17:00，<b>16:00 停止入场</b>"],
+        ["距酒店","约 1.6–2.3 km"],
+        ["费用","免费不免票，需实名预约"]],
+  note:"⚠️ 16:00 停止入场。10/02 若 15:00 还没进大同市区，先去博物馆再回酒店办入住。",
+  q:false, poi:"museum"},
+
+ {nm:"云冈石窟", tag:"已购票 + 讲解", cls:"",
+  rows:[["地址","大同市云冈区云冈镇1号（市区西郊 17 km）"],
+        ["电话","0352-7992683（讲解咨询）"],
+        ["场次","<b>10/04（周日）06:30–10:30</b>"],
+        ["讲解","已购（小程序）· 现场人工讲解处在昙曜广场南北长廊"],
+        ["建议","上午 10 点前人最少、光影最好"]],
+  note:"⚠️ 06:30 场 = 05:45 必须从酒店出门（约 16 km / 30 分钟）。前一晚把车充满。",
+  q:false, poi:"yungang"},
+
+ {nm:"悬空寺（含登临）", tag:"已购票", cls:"",
+  rows:[["地址","大同市浑源县 · 恒山翠屏峰峭壁间"],
+        ["电话","票务 0352-8333031 · 咨询 0352-8333077"],
+        ["场次","<b>10/05（周一）08:00 登临</b>"],
+        ["开放","悬空寺 08:00–17:00（10 月 · 春秋季）"],
+        ["票价","门票 15 元 + 登临费 100 元（全价）"],
+        ["停车","<b>车停「恒山游客中心」停车场</b>，换摆渡车进景区"]],
+  note:"⚠️ 景区内不售票、不补票、不允许自驾进入。导航终点请设「恒山游客中心」，不是「悬空寺」；售票和摆渡车比景区开门早半小时开始。",
+  q:false, poi:"center"},
+
+ {nm:"应县木塔（佛宫寺释迦塔）", tag:"计划前往", cls:"w",
+  rows:[["地址","朔州市应县应元街1号（佛宫寺内）"],
+        ["电话","+86 349 5088889（票务）"],
+        ["开放","08:00–17:00（16:30 停止售票 / 16:45 停止入场）"],
+        ["时长","建议 1–2 小时"],
+        ["提示","木塔已不允许登塔，外围仰视"]],
+  note:"距大同约 70–85 km（约 1 小时）；从云冈石窟过去约 110 km / 1.5 小时。",
+  q:true, poi:"yingxian"}
+];
+
+/* ============================================================
+   逐日行程
+   ============================================================ */
+const DAYS=[
+ {n:"Day 1", d:"10/02 周五", title:"天津 → 大同 · 赶路 + 博物馆", km:"约 470 km",
+  color:"var(--d1)",
+  marks:[['t2','已订酒店'],['t2','博物馆已预约']],
+  tl:[
+   {t:"07:00", x:"从 <b>天津东丽湖华侨城</b> 出发",
+    d:"全程约 470 km。走河北线（不经北京）：保定方向往西，经涞源、蔚县入晋。"},
+   {t:"~10:30", x:"中途下高速：<b>充电 + 午饭</b>",
+    d:"建议落点 <b>涞源</b>（行程约 310 km）或 <b>蔚县</b>（约 390 km）——都是县城，有快充、有热食。"},
+   {t:"15:00", x:"抵达 "+pl("hotel")+"，办理入住",
+    d:"14:00 后即可入住；免费停车，车可直接插上充电。"},
+   {t:"15:30", x:"参观 "+pl("museum"), d:"距酒店约 1.6–2.3 km。", hi:true},
+   {t:"16:00", x:"⛔ 博物馆停止入场",
+    d:"硬截止线——如果 15:00 还没进大同市区，先直奔博物馆，行李留车上。", hi:true},
+   {t:"18:00", x:"晚饭 · "+pl("wenying","文瀛湖生态公园"), d:"距酒店约 2.9 km，适合饭后散步。"},
+   {t:"21:00", x:"酒店充电过夜", d:"明天 05:45 就要出门，务必充到接近满电。"}
+  ],
+  route:{to:"museum", via:null,
+   flow:'天津东丽湖华侨城 → 河北线（保定 · 涞源 · 蔚县）→ 大同恒安街 → 大同市博物馆',
+   note:"高德 URI 的「途经点」官方最多只支持 1 个，所以这一键只覆盖终点；中途的涞源 / 蔚县请在高德里自己加途经点。"}},
+
+ {n:"Day 2", d:"10/03 周六", title:"大同古城 · 一日步行", km:"市区约 20 km",
+  color:"var(--d2)",
+  marks:[['t2','全天免长途']],
+  tl:[
+   {t:"09:00", x:pl("huayan"),
+    d:"大西街一带。夏季开放 08:00–18:30（18:00 停票）——以现场公告为准。"},
+   {t:"11:00", x:pl("jiulong"),
+    d:"门票 10 元，08:30–17:30。全国现存规模最大、年代最早的琉璃九龙壁。从华严寺步行约 20 分钟。"},
+   {t:"12:30", x:"古城内午饭", d:"从九龙壁步行可达鼓楼 / 仿古街一带。"},
+   {t:"14:30", x:pl("shanhua"),
+    d:"门票 40 元，08:30–17:00。比华严寺清静，重点看大雄宝殿与三圣殿塑像壁画，寺前有明代五龙壁。"},
+   {t:"17:30", x:pl("qingyuan","西城墙 · 清远门"),
+    d:"城墙春秋季 07:00–22:00，四门（和阳 / 永泰 / 清远 / 武定）都能上下。夜景是古城最值得的一处，所以放最后。"},
+   {t:"20:00", x:"回酒店充电", d:"市区往返很短，电量基本不动。"}
+  ],
+  route:{to:"qingyuan", via:"shanhua",
+   flow:'华严寺 → 九龙壁 → 善化寺 → 清远门（西城墙夜景）',
+   note:"四个点都在古城内，实际靠走；开车建议停古城外围停车场，城内路窄且车位紧张。"}},
+
+ {n:"Day 3", d:"10/04 周日", title:"云冈石窟 → 应县木塔", km:"约 215 km",
+  color:"var(--d3)",
+  marks:[['t1','06:30 场 · 05:45 出门'],['t2','讲解已购']],
+  tl:[
+   {t:"05:45", x:"酒店出发 → "+pl("yungang"),
+    d:"16 km / 约 30 分钟。早场人最少，光影也最好。", hi:true},
+   {t:"06:30", x:"云冈石窟入园（订场 06:30–10:30）",
+    d:"重点看第 16–20 窟「昙曜五窟」。已购讲解，检票后先到昙曜广场南北长廊找讲解服务处。", hi:true},
+   {t:"10:30", x:"离场，出发去 "+pl("yingxian"), d:"约 110 km / 1.5 小时。"},
+   {t:"12:30", x:"应县木塔",
+    d:"08:00–17:00，16:30 停止售票。世界现存最高、最古老的木构塔（约 67 m），已不允许登塔。"},
+   {t:"14:30", x:"返程回大同", d:"约 70–85 km / 约 1 小时。"},
+   {t:"16:00", x:"回酒店补电 · 古城晚饭", d:"全天约 215 km，一次充电绰绰有余。"}
+  ],
+  route:{to:"yingxian", via:"yungang",
+   flow:'酒店 → 云冈石窟 → 应县木塔 → 回大同酒店',
+   note:"一键导航覆盖「云冈石窟（途经）→ 应县木塔（终点）」。从木塔回大同请重新导航。"}},
+
+ {n:"Day 4", d:"10/05 周一", title:"悬空寺 → 返津", km:"约 570 km",
+  color:"var(--d4)",
+  marks:[['t1','08:00 登临场'],['t1','10:30 起返程']],
+  tl:[
+   {t:"06:00", x:"退房出发 → "+pl("center","恒山游客中心"),
+    d:"约 70 km / 1 小时。导航终点设「恒山游客中心」，别直接导「悬空寺」。", hi:true},
+   {t:"07:30", x:"游客中心：停车 + 取票 + 摆渡车",
+    d:"售票窗口与摆渡车比景区开门早半小时开始。", hi:true},
+   {t:"08:00", x:"悬空寺登临（8:00 场）",
+    d:"登临约 1.5–2 小时。悬空寺台阶一次仅容 1 人通行，人多时排队会拖长。"},
+   {t:"10:30", x:"出发返津", d:"约 500 km / 6.5 小时（含 1–2 次补电）。", hi:true},
+   {t:"~13:00", x:"中途补电 + 午饭", d:"同样走河北线回津。国庆服务区排队，留足余量。"},
+   {t:"19:00–20:00", x:"抵达天津", d:"这是全程最长的一天，全天约 13 小时。"}
+  ],
+  route:{to:"center", via:"xkasi",
+   flow:'大同酒店 → 恒山游客中心（停车换摆渡车）→ 悬空寺 → 返天津',
+   note:"「恒山游客中心」没有可靠公开坐标，这个链接走高德关键词搜索；落地后照现场指示牌走。"}}
+];
+
+/* ============================================================
+   待办
+   ============================================================ */
+const TODO=[
+ {t:"出发前：把三个预约码截图存进手机相册", crit:true,
+  d:"云冈石窟、悬空寺登临、大同市博物馆。景区排队处信号差，翻聊天记录会耽误时间。"},
+ {t:"出发前：在高德设好路线并加途经点", crit:false,
+  d:"确认走河北线（不经北京），所以不需要办进京证。中途把涞源或蔚县设为途经点。"},
+ {t:"出发前：用小鹏 App 规划沿途超充，另备一个第三方桩", crit:true,
+  d:"M03 满电实际 490 km，高速会掉到六到七折，天津→大同约 470 km 必须补一次电。国庆服务区排队，优先考虑下高速进县城充。"},
+ {t:"10/04 前一晚：把车充满", crit:true, d:"05:45 出门去云冈，早上没时间充。"},
+ {t:"10/05 早上：导航终点必须是「恒山游客中心」", crit:true,
+  d:"景区内不售票、不让自驾进入——必须停车换摆渡车。直接导「悬空寺」可能把你带到进不去的路口。"},
+ {t:"10/05：前一晚跟前台说好快速退房", crit:false,
+  d:"你 06:00 就走，但标准退房时间是 12:00 前；提前打个招呼省事。"},
+ {t:"全程：高速免费但会堵，按 1.5 倍时间预留", crit:false,
+  d:"10/1–10/7 小型客车免费通行；10/2 出发日和 10/5 返程日都是车流高峰。"},
+ {t:"10/04：应县木塔 16:30 停止售票", crit:false,
+  d:"从云冈过去约 1.5 小时，中午出发时间是够的，但别在云冈恋战到下午两点。"}
+];
+
+const TIPS=[
+ ["博物馆","免费不免票，需在「大同市博物馆」公众号分时段实名预约；16:00 停止入场，周一闭馆（10/02 是周五，不受影响）。"],
+ ["悬空寺","门票 15 元与登临费 100 元是两笔。登临票线上每天 07:20 起在「恒山景区」公众号 / 「北岳云游」小程序发售，可提前 7 天，分上午、下午两个登临时段。"],
+ ["恒山 ≠ 悬空寺","两者是独立游览区、分别购票，不能从恒山山顶步行到悬空寺。"],
+ ["应县木塔","已禁止登塔，只能在外围看；塔北有附属寺院可一并看。"],
+ ["云冈石窟","上午 10 点前或下午 3 点后光影最好、人也少。景区提供人工讲解、智慧讲解器和 AI 导览屏三种。"],
+ ["天气与穿着","大同属温带半干旱大陆性气候，秋季多晴、昼夜温差大，早晚偏凉——带一件外套。"],
+ ["古城停车","古城内路窄、车位紧张，建议停酒店或古城外围停车场，再步行进城。"],
+ ["充电","酒店自带充电桩，晚上回店插上最省心；宣大高速化稍营、阳原服务区各有 4 个快充，宣化服务区双侧共 8 个。"],
+ ["退票规则","恒山 / 悬空寺线上票可在游览日之前的每天 07:25–22:00 退，过期不退。"],
+ ["实时信息","门票与开放时间可能因客流临时调整，以景区现场公告和高德实时信息为准。"]
+];
+
+/* ============================================================
+   渲染
+   ============================================================ */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+document.getElementById("confirmed").innerHTML = CONFIRMED.map(c=>{
+  const rows=c.rows.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${v}</dd>`).join("");
+  return `<div class="card">
+    <div class="hd"><div class="nm">${esc(c.nm)}</div><div class="tag ${c.cls}">${esc(c.tag)}</div></div>
+    <dl>${rows}</dl>
+    ${c.note?`<div class="note${c.q?" q":""}">${c.note}</div>`:""}
+    <div class="acts"><a class="btn p" href="${pointUrl(c.poi)}" rel="noopener">高德导航 ↗</a></div>
+  </div>`;
+}).join("");
+
+document.getElementById("days").innerHTML = DAYS.map(d=>{
+  const tl=d.tl.map(e=>`<li class="${e.hi?"hi":""}">
+      <div class="tm">${esc(e.t)}</div>
+      <div class="tx"><div class="t">${e.x}</div>${e.d?`<div class="d">${e.d}</div>`:""}</div>
+    </li>`).join("");
+  const marks=d.marks.map(m=>`<span class="term ${m[0]}">${esc(m[1])}</span>`).join("");
+  const r=d.route;
+  return `<div class="day">
+    <div class="top">
+      <div class="bar" style="background:${d.color}"></div>
+      <div><div class="dn">${esc(d.n)} · ${esc(d.d)}</div><div class="dt">${esc(d.title)}</div></div>
+      <div class="km">${esc(d.km)}</div>
+    </div>
+    <ul class="marks">${marks}</ul>
+    <ul class="tl">${tl}</ul>
+    <details class="rt">
+      <summary>展开当日路线<span class="rt-x">1 个途经点</span></summary>
+      <div class="rt-body">
+        <div class="flow">${r.flow.replace(/→/g,"<span>→</span>")}</div>
+        <p>${r.note}</p>
+        <div class="acts">
+          <a class="btn p" href="${navUrl(r.to,r.via)}" rel="noopener">一键全天导航 ↗</a>
+          <a class="btn" href="${pointUrl(r.to)}" rel="noopener">只导终点 ↗</a>
+        </div>
+      </div>
+    </details>
+  </div>`;
+}).join("");
+
+document.getElementById("todo").innerHTML = TODO.map((x,i)=>`<li class="${x.crit?"crit":""}">
+    <div class="ix">${String(i+1).padStart(2,"0")}</div>
+    <div class="bd"><div class="t">${x.t}</div><div class="d">${x.d}</div></div>
+  </li>`).join("");
+
+document.getElementById("tips").innerHTML = TIPS.map(([k,v])=>`<li><b>${esc(k)}</b>　${v}</li>`).join("");
+
+/* ============================================================
+   倒计时：绝对时刻，跨时区正确
+   ============================================================ */
+const EVENTS=[
+ ["2026-10-02T07:00:00+08:00","从天津东丽湖出发"],
+ ["2026-10-02T15:00:00+08:00","抵达大同 · 入住希尔顿惠庭"],
+ ["2026-10-02T15:30:00+08:00","参观大同市博物馆"],
+ ["2026-10-02T16:00:00+08:00","⛔ 博物馆停止入场"],
+ ["2026-10-03T09:00:00+08:00","大同古城 · 华严寺"],
+ ["2026-10-04T05:45:00+08:00","出发前往云冈石窟"],
+ ["2026-10-04T06:30:00+08:00","云冈石窟入园（6:30–10:30 场）"],
+ ["2026-10-04T12:30:00+08:00","应县木塔"],
+ ["2026-10-05T06:00:00+08:00","退房出发 · 恒山游客中心"],
+ ["2026-10-05T08:00:00+08:00","悬空寺登临（8:00 场）"],
+ ["2026-10-05T10:30:00+08:00","出发返津"],
+ ["2026-10-05T20:00:00+08:00","抵达天津 · 行程结束"]
+].map(e=>({ms:new Date(e[0]).getTime(), l:e[1]}));
+
+const fmtBJ=new Intl.DateTimeFormat("zh-CN",{timeZone:"Asia/Shanghai",
+  month:"numeric",day:"numeric",weekday:"short",hour:"2-digit",minute:"2-digit",hour12:false});
+
+const box=document.getElementById("now");
+const evTxt=document.getElementById("evTxt"), evWhen=document.getElementById("evWhen");
+const cdD=document.getElementById("cdD"), cdH=document.getElementById("cdH"),
+      cdM=document.getElementById("cdM"), cdS=document.getElementById("cdS");
+const p2=n=>String(n).padStart(2,"0");
+
+function tick(){
+  const now=Date.now();
+  const i=EVENTS.findIndex(e=>e.ms>now);
+  if(i<0){
+    box.classList.add("done");
+    const last=EVENTS[EVENTS.length-1];
+    evTxt.textContent="行程已结束";
+    evWhen.textContent=last.l+" · "+fmtBJ.format(new Date(last.ms))+"（北京时间）";
+    return;
+  }
+  const e=EVENTS[i];
+  let diff=e.ms-now;
+  const dd=Math.floor(diff/864e5); diff-=dd*864e5;
+  const hh=Math.floor(diff/36e5);  diff-=hh*36e5;
+  const mm=Math.floor(diff/6e4);   diff-=mm*6e4;
+  const ss=Math.floor(diff/1e3);
+  evTxt.textContent=e.l;
+  evWhen.textContent=fmtBJ.format(new Date(e.ms))+"（北京时间）";
+  cdD.textContent=dd; cdH.textContent=p2(hh); cdM.textContent=p2(mm); cdS.textContent=p2(ss);
+}
+tick(); setInterval(tick,1000);
+</script>
 </body>
 </html>
